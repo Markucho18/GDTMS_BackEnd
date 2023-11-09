@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const port = 3001;
 
-const usuariojs = require('./routes/usuario');
+const usuariojs = require('./routes/usuarios');
 
 const tareasjs = require('./routes/tareas');
 
@@ -13,7 +13,7 @@ app.get("/", (req, res)=>{
     res.send("Hola amigo, estas en el archivo principal");
 })
 
-app.use('/usuario', usuariojs);
+app.use('/usuarios', usuariojs);
 
 app.use('/tareas', tareasjs);
 

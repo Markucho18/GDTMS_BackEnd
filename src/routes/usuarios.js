@@ -1,10 +1,10 @@
-//etiquetas.js
+//usuario.js
 const express = require('express');
 const db = require('../db');
 const router = express.Router();
 
 router.get("/", (req, res)=>{
-    const query = 'SELECT * FROM etiquetas'
+    const query = "SELECT * FROM `usuarios`"
     db.query(query, (err, result)=>{
         if(err){
             console.error('Error al ejecutar la consulta', err);
@@ -14,8 +14,5 @@ router.get("/", (req, res)=>{
         console.log(result);
     })
 })
-
-
-
 
 module.exports = router;
