@@ -15,4 +15,18 @@ router.get("/", (req, res)=>{
     })
 })
 
+router.post("/", (req, res)=>{
+    console.log("Datos recibidos:", req.body);
+    res.send("Peticion post recibida")
+    const {username, email, pais, password} = req.body
+    const query = "INSERT INTO usuarios (username, password, e-mail, id_pais) VALUES (?, ?, ?, ?) "
+    db.query(query, [username, email, pais, password], (err, result)=>{
+        if (error) {
+            console.error('Error al ejecutar la consulta SQL:', error);
+            return;
+          }
+          console.log('Filas afectadas:', results.affectedRows);
+    })
+})
+
 module.exports = router;

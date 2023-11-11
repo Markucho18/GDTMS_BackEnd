@@ -1,23 +1,26 @@
 //app.js
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser')
 const app = express();
 const port = 3001;
-
-const usuariojs = require('./routes/usuarios');
-
-const tareasjs = require('./routes/tareas');
-
-const etiquetasjs = require('./routes/etiquetas');
 
 app.get("/", (req, res)=>{
     res.send("Hola amigo, estas en el archivo principal");
 })
 
-app.use('/usuarios', usuariojs);
+//Resuelve el problema de origen cruzado (puertos diferentes)
+app.use(cors());
 
-app.use('/tareas', tareasjs);
+//Traduce lo que llegue de la request de cualquier ruta al tipo de archivo correspondiente.
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/etiquetas', etiquetasjs);
+app.use('/usuarios', require('./routes/usuarios'));
+
+app.use('/tareas', require('./routes/tareas'));
+
+app.use('/etiquetas', require('./routes/etiquetas'));
 
 app.use((req, res)=>{
     res.send("Pagina no encontrada");
