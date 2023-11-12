@@ -5,12 +5,13 @@ const bodyParser = require('body-parser')
 const app = express();
 const port = 3001;
 
+app.use(cors());
+
 app.get("/", (req, res)=>{
     res.send("Hola amigo, estas en el archivo principal");
 })
 
 //Resuelve el problema de origen cruzado (puertos diferentes)
-app.use(cors());
 
 //Traduce lo que llegue de la request de cualquier ruta al tipo de archivo correspondiente.
 app.use(bodyParser.json());
