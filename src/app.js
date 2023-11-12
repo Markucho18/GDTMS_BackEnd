@@ -22,6 +22,8 @@ app.use('/tareas', require('./routes/tareas'));
 
 app.use('/etiquetas', require('./routes/etiquetas'));
 
+app.use('/paises', require('./routes/paises'))
+
 app.use((req, res)=>{
     res.send("Pagina no encontrada");
 })
