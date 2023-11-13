@@ -1,23 +1,24 @@
 //app.js
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const app = express();
 const port = 3001;
 
+//Resuelve el problema de origen cruzado (puertos diferentes)
 app.use(cors());
 
 app.get("/", (req, res)=>{
     res.send("Hola amigo, estas en el archivo principal");
 })
 
-//Resuelve el problema de origen cruzado (puertos diferentes)
-
 //Traduce lo que llegue de la request de cualquier ruta al tipo de archivo correspondiente.
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/usuarios', require('./routes/usuarios'));
+
+app.use('/register', require('./routes/register'))
 
 app.use('/tareas', require('./routes/tareas'));
 
@@ -32,4 +33,5 @@ app.use((req, res)=>{
 app.listen(port, ()=>{
     console.log(`Server listening on port: ${port}`);
 })
+
 
