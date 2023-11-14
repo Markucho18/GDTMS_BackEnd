@@ -18,7 +18,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/usuarios', require('./routes/usuarios'));
 
-app.use('/register', require('./routes/register'))
+app.use('/register', require('./routes/register'));
+
+app.use('/login', require('./routes/login'));
 
 app.use('/tareas', require('./routes/tareas'));
 

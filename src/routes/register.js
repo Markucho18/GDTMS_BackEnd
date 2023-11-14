@@ -26,9 +26,9 @@ router.post("/username", (req, res)=>{
         db.query(query, [req.body.username], (err, result) =>{
             if(err) return res.json({mensaje: "Hubo un error", error: err});
             if(result.length > 0){
-                return res.json({message: "Se encontro coincidencia de username", resultado: result});
+                return res.json({mensaje: "Se encontro coincidencia de username", resultado: result});
             }
-            else console.log("No se encontro coincidencia de username", result);
+            else return res.json({mensaje:"No se encontro coincidencia de username", resultado: result});
         })
     }
     catch(err){
@@ -46,7 +46,7 @@ router.post("/email", (req, res)=>{
             if(result.length > 0){
                 return res.json({message: "Se encontro coincidencia de email", resultado: result});
             }
-            else console.log("No se encontro coincidencia de email", result);
+            else return res.json({mensaje:"No se encontro coincidencia de email", resultado: result});
         })
     }
     catch(err){
