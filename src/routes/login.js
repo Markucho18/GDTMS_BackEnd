@@ -41,5 +41,7 @@ router.post("/token", (req, res)=>{
     }
 })
 
+//PROBAR CON UNA VARIABLE DE ESTADO COMO DIJO SHAGGY
+
 
 module.exports = router;
