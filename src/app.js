@@ -22,6 +22,8 @@ app.use('/register', require('./routes/register'));
 
 app.use('/login', require('./routes/login'));
 
+app.use('/token', require('./routes/token'));
+
 app.use('/tareas', require('./routes/tareas'));
 
 app.use('/etiquetas', require('./routes/etiquetas'));

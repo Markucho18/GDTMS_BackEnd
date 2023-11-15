@@ -1,13 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const db = require('../db');
-
-const secretKey = '48253755061145888295'
-
-router.use(cookieParser());
 
 router.get("/", (req, res)=> res.send("Estas en /login"))
 
@@ -28,17 +22,6 @@ router.post("/password", (req, res)=>{
         }
         else return res.json({mensaje: "No se encontro nada", resultado: result})
     })
-})
-
-router.post("/token", (req, res)=>{
-    try{
-        const token = jwt.sign({ username: req.body.username }, secretKey, { expiresIn: '1h' });
-        res.cookie('jwt', token, { httpOnly: false, maxAge: 60 * 60 * 1000 }); 
-        res.json({mensaje: "Token generado correctamente", token});
-    }
-    catch(err){
-        return res.json({mensaje: "Hubo un error con el token", error: err})
-    }
 })
 
 //PROBAR CON UNA VARIABLE DE ESTADO COMO DIJO SHAGGY
