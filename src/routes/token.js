@@ -2,13 +2,15 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const db = require('../db')
-const { serialize } = require('cookie');
+const cookieParser = require('cookie-parser');
 
 const secretKey = '48253755061145888295'
 
 router.get('/', (req, res) =>{
     res.send("Que onda ");
 })
+
+router.use(cookieParser());
 
 router.post("/create", (req, res)=>{
     try{
@@ -18,7 +20,7 @@ router.post("/create", (req, res)=>{
             const query = 'UPDATE usuarios SET token = ? WHERE username = ?'
             db.query(query, [token, username], (err, result)=>{
                 if(err) res.json({msg: "Hubo un error al actualizar el token", err})
-                else res.json({msg: "El token se actualizo bien", result, token})
+                else res.json({msg: "El token se creo correctamente", result, token});
             })
         }
     }
@@ -40,10 +42,6 @@ router.post("/verify", (req, res)=>{
                 })
             }
         })
-        /* jwt.verify(token, secretKey, (err, decoded)=>{
-            if(err) res.json({valido: false, err})
-            else res.json({valido: true, info: decoded})
-        }) */
     }
     catch(err){
         return res.json({mensaje: "Hubo un error al verificar el token", err})
