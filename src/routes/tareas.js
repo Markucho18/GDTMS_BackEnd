@@ -15,9 +15,20 @@ router.get("/", (req, res) => {
   });
 });
 
-router.post("/crear", (req, res)=>{
-    const query = "INSERT INTO tareas ()"
-})
+router.post("/crear", (req, res) => {
+  try {
+    const { idUsuario, idEtiqueta, nombre, prioridad, fecha, descripcion } = req.body;
+    console.log("El idUsuario recibido del frontend es: ", idUsuario);
+    const query = "INSERT INTO tareas (id_usuario, id_etiqueta, nombre, prioridad, fecha, descripcion) VALUES (?, ?, ?, ?, ?, ?) ";
+    db.query(query, [idUsuario, idEtiqueta, nombre, prioridad, fecha, descripcion], (err, result) => {
+        if (err) res.json({msg: "Hubo un error al hacer la consulta SQL en crearTarea", err});
+        else res.json({ msg: "Datos enviados correctamente", result });
+      }
+    );
+  } catch (err) {
+    return res.json({ msg: "Hubo un error al crear la tarea", err });
+  }
+});
 
 module.exports = router;
 
