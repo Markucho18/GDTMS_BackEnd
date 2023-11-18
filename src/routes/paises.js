@@ -6,7 +6,6 @@ router.get("/", (req, res)=>{
     const query = "SELECT * FROM paises"
     db.query(query, (err, result)=>{
         if(!err){
-            console.log("Consulta de paises correcta")
             res.send(result)
         }
         else console.log("Hubo un error en paises: ", err)
