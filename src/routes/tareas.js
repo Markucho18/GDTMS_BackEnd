@@ -54,6 +54,21 @@ router.post("/crear", (req, res) => {
   }
 });
 
+router.put("/", (req, res)=>{
+  try{
+    const {idTarea, idEtiqueta, nombre, prioridad, fecha, descripcion } = req.body;
+    console.log("Los datos de la tarea recibidos son: ", req.body);
+    const query = 'UPDATE tareas SET nombre = ? , prioridad = ? , fecha = ? , descripcion = ? , id_etiqueta = ? WHERE id_tarea = ?'
+    db.query(query, [nombre, prioridad, fecha, descripcion, idEtiqueta, idTarea], (err, result)=>{
+      if(err) res.json({msg: "Hubo un error al hacer la consulta SQL en editarTarea", err});
+      else res.json({msg: "La tarea se ha editado correctamente", result});
+    })
+  }
+  catch(err){
+    return res.json({ msg: "Hubo un error al crear la tarea (catch)", err });
+  }
+})
+
 router.delete("/", (req, res)=>{
   if (req.query && Object.keys(req.query).length > 0){
     const idTarea = req.query.idTarea;
@@ -68,39 +83,3 @@ router.delete("/", (req, res)=>{
 })
 
 module.exports = router;
-
-/* router.get("/inbox", (req, res)=>{
-        const query = "SELECT * FROM `tareas` WHERE `fecha` IS NULL"
-        db.query(query, (err, result)=>{
-            if(err){
-                console.error('Error al ejecutar la consulta', err);
-                return
-            }
-            res.send(result)
-            console.log(result);
-        })
-    })
-    
-    router.get("/hoy", (req, res) =>{
-        const query = "SELECT * FROM `tareas` WHERE `fecha` = CURDATE()"
-        db.query(query, (err, result)=>{
-            if(err){
-                console.error('Error al ejecutar la consulta', err);
-                return
-            }
-            res.send(result)
-            console.log(result);
-        })
-    })
-    
-    router.get("/proximo", (req, res) =>{
-        const query = "SELECT * FROM `tareas` WHERE `fecha` != CURDATE()"
-        db.query(query, (err, result)=>{
-            if(err){
-                console.error('Error al ejecutar la consulta', err);
-                return
-            }
-            res.send(result)
-            console.log(result);
-        })
-    }) */
