@@ -54,6 +54,17 @@ router.post("/crear", (req, res) => {
   }
 });
 
+router.post("/buscar", (req, res)=>{
+  console.log(req.body);
+  const {textoBusqueda} = req.body;
+  console.log("El textoBusqueda recibido desde el frontend es: ", textoBusqueda);
+  const query = `SELECT * FROM tareas WHERE nombre LIKE "%${textoBusqueda}%" `;
+  db.query(query, (err, result)=>{
+    if(err) res.json({msg: "Hubo un error SQL al buscar tarea", err});
+    else res.json({msg: "La consulta SQL buscar tarea salio bien", result});
+  })
+})
+
 router.put("/", (req, res)=>{
   try{
     const {idTarea, idEtiqueta, nombre, prioridad, fecha, descripcion } = req.body;
