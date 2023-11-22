@@ -3,6 +3,46 @@ const express = require("express");
 const db = require("../db");
 const router = express.Router();
 
+//PARA OBTENER EL ID DE LA ETIQUETA DEL FRONT:
+router.use("/", (req, res, next)=>{
+  if(req.query && Object.keys(req.query).length > 0){
+    const etiqueta = req.query.etiqueta;
+    const query = 'SELECT id_etiqueta FROM etiquetas WHERE nombre = ? ';
+    db.query(query, [etiqueta], (err, result)=>{
+      if(err) res.json({msg:"Hubo un error SQL al obtener el ID de la etiqueta", err});
+      else{
+        console.log("Los resultados de la consulta SQL son: ", result);
+        req.idEtiquetaa = result[0].id_etiqueta;
+      }
+    })
+    console.log("Se han recibido queries idEtiqueta dentro de /Tareas", req.query);
+    next();
+  }
+  else{
+    console.log("No hay query(idEtiqueta) en tareas");
+    next();
+  }
+})
+
+//PARA OBTENER LAS TAREAS POR EL IDETIQUETA:
+router.use("/", (req, res, next)=>{
+  if(req.query && Object.keys(req.query).length > 0){
+    const idEtiqueta = req.idEtiquetaa;
+    console.log("idEtiqueta es: ", idEtiqueta);
+    const query = 'SELECT * FROM tareas WHERE id_etiqueta = ? ';
+    db.query(query, [idEtiqueta], (err, result)=>{
+      if(err) res.json({msg:"Hubo un error SQL al obtener las tareas con esa etiqueta", err});
+      else res.json({msg: "Las tareas segun etiqueta sean obtenido correctamente con SQL: ", result})
+    })
+    console.log("Se ha recibi un idEtiqueta dentro de /Tareas: ", req.query);
+    next();
+  }
+  else{
+    console.log("No hay query(etiqueta) en tareas");
+    next();
+  }
+})
+
 router.get("/", (req, res) => {
   const query = "SELECT * FROM tareas";
   db.query(query, (err, result) => {
@@ -14,6 +54,7 @@ router.get("/", (req, res) => {
     console.log(result);
   });
 });
+
 
 router.get("/inbox", (req, res)=>{
   const query = 'SELECT * FROM tareas WHERE fecha IS NULL'
@@ -90,7 +131,7 @@ router.delete("/", (req, res)=>{
     })
 
   }
-  else "No hay query en tareas/delete";
+  else res.send("No hay query en tareas/delete");
 })
 
 module.exports = router;
