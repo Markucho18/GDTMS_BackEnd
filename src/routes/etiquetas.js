@@ -3,21 +3,6 @@ const express = require('express');
 const db = require('../db');
 const router = express.Router();
 
-router.use("/", (req, res, next)=>{
-    //Comprueba si le ha llegado query
-    if (req.query && Object.keys(req.query).length > 0){
-        const idEtiqueta = req.query.idEtiqueta;
-        if(idEtiqueta == null) return res.json("La etiqueta recibida por query es null");
-        else{
-            const query = 'SELECT nombre FROM etiquetas WHERE id_etiqueta = ?'
-            db.query(query, [idEtiqueta], (err, result)=>{
-            if(err) res.json({msg: "Hubo un error SQL en etiquetas query", err});
-            else res.json({msg: "Salio todo bien en SQL etiquetas query", result});
-        })
-        }
-    }
-    else next();
-})
 
 
 router.get("/", (req, res)=>{
@@ -31,7 +16,41 @@ router.get("/", (req, res)=>{
     })
 })
 
+//OBTENER EL NOMBRE POR EL ID
+router.get("/getNombre", (req, res)=>{
+    //Comprueba si le ha llegado query
+    if (req.query && Object.keys(req.query).length > 0){
+        if(req.query.idEtiqueta){
+            const idEtiqueta = req.query.idEtiqueta;
+            if(idEtiqueta == null) return res.json("El idEtiqueta recibido por query es null");
+            else{
+                const query = 'SELECT nombre FROM etiquetas WHERE id_etiqueta = ?'
+                db.query(query, [idEtiqueta], (err, result)=>{
+                if(err) res.json({msg: "Hubo un error SQL en etiquetas query", err});
+                else res.json({msg: "Salio todo bien en SQL etiquetas query", result});
+            })
+            }
+        }
+    }
+})
 
-
+//OBTENER EL ID POR EL NOMBRE
+router.get("/getId", (req, res)=>{
+    //Comprueba si le ha llegado query
+    if (req.query && Object.keys(req.query).length > 0){
+        if(req.query.nomEtiqueta){
+            const etiqueta = req.query.nomEtiqueta;
+            if(etiqueta == null) return res.json("El idEtiqueta recibido por query es null");
+            else{
+                const query = 'SELECT id_etiqueta FROM etiquetas WHERE nombre = ?'
+                db.query(query, [etiqueta], (err, result)=>{
+                if(err) res.json({msg: "Hubo un error SQL en etiquetas query", err});
+                else res.send(result);
+                /* else res.json({msg: "Salio todo bien en SQL etiquetas query", result}); */
+            })
+            }
+        }
+    }
+})
 
 module.exports = router;

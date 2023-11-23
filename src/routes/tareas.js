@@ -3,45 +3,6 @@ const express = require("express");
 const db = require("../db");
 const router = express.Router();
 
-//PARA OBTENER EL ID DE LA ETIQUETA DEL FRONT:
-router.use("/", (req, res, next)=>{
-  if(req.query && Object.keys(req.query).length > 0){
-    const etiqueta = req.query.etiqueta;
-    const query = 'SELECT id_etiqueta FROM etiquetas WHERE nombre = ? ';
-    db.query(query, [etiqueta], (err, result)=>{
-      if(err) res.json({msg:"Hubo un error SQL al obtener el ID de la etiqueta", err});
-      else{
-        console.log("Los resultados de la consulta SQL son: ", result);
-        req.idEtiquetaa = result[0].id_etiqueta;
-      }
-    })
-    console.log("Se han recibido queries idEtiqueta dentro de /Tareas", req.query);
-    next();
-  }
-  else{
-    console.log("No hay query(idEtiqueta) en tareas");
-    next();
-  }
-})
-
-//PARA OBTENER LAS TAREAS POR EL IDETIQUETA:
-router.use("/", (req, res, next)=>{
-  if(req.query && Object.keys(req.query).length > 0){
-    const idEtiqueta = req.idEtiquetaa;
-    console.log("idEtiqueta es: ", idEtiqueta);
-    const query = 'SELECT * FROM tareas WHERE id_etiqueta = ? ';
-    db.query(query, [idEtiqueta], (err, result)=>{
-      if(err) res.json({msg:"Hubo un error SQL al obtener las tareas con esa etiqueta", err});
-      else res.json({msg: "Las tareas segun etiqueta sean obtenido correctamente con SQL: ", result})
-    })
-    console.log("Se ha recibi un idEtiqueta dentro de /Tareas: ", req.query);
-    next();
-  }
-  else{
-    console.log("No hay query(etiqueta) en tareas");
-    next();
-  }
-})
 
 router.get("/", (req, res) => {
   const query = "SELECT * FROM tareas";
@@ -78,6 +39,20 @@ router.get("/proximo", (req, res)=>{
     if(err) res.json({msg: "Ha occurido un error al buscar las proximas tareas", err})
     else res.json({msg: "La consulta SQL ha devuelto las proximas tareas correctamente", result})
   })
+})
+
+router.get("/etiqueta", (req, res)=>{
+  if(req.query && Object.keys(req.query).length > 0){
+    const idEtiqueta = req.idEtiqueta;
+    console.log("idEtiqueta es: ", idEtiqueta);
+    const query = 'SELECT * FROM tareas WHERE id_etiqueta = ? ';
+    db.query(query, [idEtiqueta], (err, result)=>{
+      if(err) res.json({msg:"Hubo un error SQL al obtener las tareas con esa etiqueta", err});
+      else res.json({msg: "Las tareas segun etiqueta sean obtenido correctamente con SQL: ", result})
+    })
+    console.log("Se ha recibi un idEtiqueta dentro de /Tareas: ", req.query);
+  }
+  else console.log("No hay query(etiqueta) en tareas");
 })
 
 router.post("/crear", (req, res) => {
