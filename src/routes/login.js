@@ -11,11 +11,9 @@ router.post("/password", (req, res)=>{
     db.query(query, [req.body.username], (err, result)=>{
         if(err) return res.json({mensaje: "Hubo un error al consultar SQL", error: err})
         if(result.length > 0){
-            console.log(result)
             const hashedPassword = result[0].password
             bcrypt.compare(password, hashedPassword, (compError, passwordMatch) =>{
                 if (compError) return res.status(500).json({ mensaje: "Error al comparar contraseñas", error: compError });
-                console.log(passwordMatch)
                 if (passwordMatch) return res.send(true);
                 else return res.send(false);
             })
