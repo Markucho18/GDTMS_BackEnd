@@ -14,6 +14,7 @@ router.get("/", (req, res)=>{
         }
         res.send(result)
     })
+    console.log("Se ha hecho una consulta en /etiquetas");
 })
 
 //OBTENER EL NOMBRE POR EL ID

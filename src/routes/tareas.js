@@ -23,6 +23,7 @@ router.get("/inbox", (req, res)=>{
     if(err) res.json({msg: "Ha occurido un error al buscar tareas sin fecha", err})
     else res.json({msg: "La consulta SQL ha devuelto tareas sin fecha correctamente", result})
   })
+  console.log("Se ha hecho una consulta en /tareas/inbox");
 })
 
 router.get("/hoy", (req, res)=>{
@@ -31,6 +32,7 @@ router.get("/hoy", (req, res)=>{
     if(err) res.json({msg: "Ha occurido un error al buscar tareas de hoy", err})
     else res.json({msg: "La consulta SQL ha devuelto tareas de hoy correctamente", result})
   })
+  console.log("Se ha hecho una consulta en tareas/hoy");
 })
 
 router.get("/proximo", (req, res)=>{
