@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
   db.query(query, (err, result) => {
     if (err) {
       console.error("Error al ejecutar la consulta", err);
-      return;
+      return res.json({msg: "Ha occurido un error"});
     }
     res.send(result);
     console.log(result);
@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
 
 
 router.get("/inbox", (req, res)=>{
-  const query = 'SELECT * FROM tareas WHERE fecha IS NULL'
+  const query = 'SELECT * FROM tareas WHERE fersha IS NULL'
   db.query(query, (err, result)=>{
     if(err) res.json({msg: "Ha occurido un error al buscar tareas sin fecha", err})
     else res.json({msg: "La consulta SQL ha devuelto tareas sin fecha correctamente", result})

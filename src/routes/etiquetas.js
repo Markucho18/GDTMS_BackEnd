@@ -10,7 +10,7 @@ router.get("/", (req, res)=>{
     db.query(query, (err, result)=>{
         if(err){
             console.error('Error al ejecutar la consulta', err);
-            return
+            res.json({msg: "Ha occurido un error"});
         }
         res.send(result)
     })
@@ -31,7 +31,11 @@ router.get("/getNombre", (req, res)=>{
                 else res.json({msg: "Salio todo bien en SQL etiquetas query", result});
             })
             }
+        }else{
+            res.json({msg: "Ha occurido un error"});
         }
+    }else{
+        res.json({msg: "Ha occurido un error"});
     }
 })
 
@@ -50,7 +54,11 @@ router.get("/getId", (req, res)=>{
                 /* else res.json({msg: "Salio todo bien en SQL etiquetas query", result}); */
             })
             }
+        }else{
+            res.json({msg: "Ha occurido un error"});
         }
+    }else{
+        res.json({msg: "Ha occurido un error"});
     }
 })
 
