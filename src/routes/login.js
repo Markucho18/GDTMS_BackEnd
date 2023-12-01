@@ -16,7 +16,7 @@ router.post("/password", (req, res)=>{
                 if (compError) res.status(500).json({ mensaje: "Error al comparar contraseñas", error: compError });
                 else if (passwordMatch) res.send(true);
                 else res.send(false);
-            })
+            }) 
         }
         else res.json({mensaje: "No se encontro nada", resultado: result})
     })

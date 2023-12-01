@@ -14,7 +14,7 @@ router.get("/", (req, res)=>{
     })
 })
 
-router.post("/obtener", (req, res)=>{
+router.post("/obtenerId", (req, res)=>{
     const token = req.body.token
     console.log("El token recibido del front es: ", token);
     const query = 'SELECT id_usuario FROM usuarios WHERE token = ?'

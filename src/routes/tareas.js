@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 
 
 router.get("/inbox", (req, res)=>{
-  const query = 'SELECT * FROM tareas WHERE fersha IS NULL'
+  const query = 'SELECT * FROM tareas WHERE fecha IS NULL'
   db.query(query, (err, result)=>{
     if(err) res.json({msg: "Ha occurido un error al buscar tareas sin fecha", err})
     else res.json({msg: "La consulta SQL ha devuelto tareas sin fecha correctamente", result})
@@ -38,7 +38,7 @@ router.get("/hoy", (req, res)=>{
 })
 
 router.get("/proximo", (req, res)=>{
-  const query = 'SELECT * FROM tareas WHERE NOT fecha = CURDATE()'
+  const query = 'SELECT * FROM tareas WHERE fecha > CURRENT_DATE()'
   db.query(query, (err, result)=>{
     if(err) res.json({msg: "Ha occurido un error al buscar las proximas tareas", err})
     else res.json({msg: "La consulta SQL ha devuelto las proximas tareas correctamente", result})
