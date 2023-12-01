@@ -24,46 +24,48 @@ router.post("/username", (req, res)=>{
     try{
         const query = "SELECT username FROM usuarios WHERE username = ? "
         db.query(query, [req.body.username], (err, result) =>{
-            if(err) return res.json({mensaje: "Hubo un error", error: err});
-            if(result.length > 0){
-                return res.json({mensaje: "Se encontro coincidencia de username", resultado: result});
+            if(err) res.json({mensaje: "Hubo un error", error: err});
+            else if(result.length > 0){
+                res.json({mensaje: "Se encontro coincidencia de username", resultado: result});
             }
-            else return res.json({mensaje:"No se encontro coincidencia de username", resultado: result});
+            else res.json({mensaje:"No se encontro coincidencia de username", resultado: result});
         })
     }
     catch(err){
-        return res.json({mensaje: "Hubo un error al comprobar el username", error: err});
+        res.json({mensaje: "Hubo un error al comprobar el username", error: err});
     }
 })
 
 
-//VALIDAR EMAIL
+//VALIDAR EMAIL (que no este en uso)
 router.post("/email", (req, res)=>{
     try{
         const query = "SELECT `e-mail` FROM usuarios WHERE `e-mail` = ? "
         db.query(query, [req.body.email], (err, result) =>{
             if(err) return res.json({mensaje: "Hubo un error", error: err});
-            if(result.length > 0){
-                return res.json({message: "Se encontro coincidencia de email", resultado: result});
+            else if(result.length > 0){
+                res.json({message: "Se encontro coincidencia de email", resultado: result});
             }
-            else return res.json({mensaje:"No se encontro coincidencia de email", resultado: result});
+            else res.json({mensaje:"No se encontro coincidencia de email", resultado: result});
         })
     }
     catch(err){
-        return res.json({mensaje: "Hubo un error al comprobar el email", error: err});
+        res.json({mensaje: "Hubo un error al comprobar el email", error: err});
     }
 })
 
 //MIDDLEWARE ENCRIPTAR CONTRASEÑA
 router.use("/", async (req, res, next)=>{
     try{
-        if(req.body.password.length < 8) throw new Error("No hay contraseña")
-        req.body.password = await hashPassword(req.body.password);
-        console.log("Contraseña encriptada")
-        next();
+        if(req.body.password.length < 8) throw new Error("No hay contraseña");
+        else{
+            req.body.password = await hashPassword(req.body.password);
+            console.log("Contraseña encriptada");
+            next();
+        }
     }
     catch(err){
-        return res.json({mensaje: "Ha ocurrido un error con el hash de contraseña:", error: "No hay contraseña"});
+        res.json({mensaje: "Ha ocurrido un error con el hash de contraseña:", error: "No hay contraseña"});
     }
 })
 
@@ -74,9 +76,9 @@ router.post("/", (req, res)=>{
     const query = "INSERT INTO usuarios (username, password, `e-mail`, id_pais) VALUES (?, ?, ?, ?) "
     db.query(query, [username, password, email, pais], (err, result)=>{
         if (err) {
-            return res.json({mensaje: "Error SQL al registrar usuario:", error: err});
+            res.json({mensaje: "Error SQL al registrar usuario:", error: err});
           }
-          res.json({mensaje: "Usuario creado correctamente:", resultado: result.affectedRows});
+        else res.json({mensaje: "Usuario creado correctamente:", resultado: result.affectedRows});
     })
 })
 

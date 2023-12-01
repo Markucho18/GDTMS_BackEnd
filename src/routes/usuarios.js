@@ -6,12 +6,11 @@ const router = express.Router();
 router.get("/", (req, res)=>{
     const query = "SELECT * FROM `usuarios`"
     db.query(query, (err, result)=>{
-        if(err){
-            console.error('Error al ejecutar la consulta', err);
-            return
+        if(err) return console.error('Error al ejecutar la consulta', err);
+        else{
+            console.log(result);
+            res.status(200).send(result);
         }
-        res.status(200).send(result);
-        console.log(result);
     })
 })
 

@@ -28,10 +28,10 @@ router.post("/create", (req, res)=>{
                     res.json({msg: "El token se creo correctamente", result, token});
                 }
             })
-        }
+        } else res.send("No hay Token");
     }
     catch(err){
-        return res.json({mensaje: "Hubo un error al crear el token", err})
+        res.json({mensaje: "Hubo un error al crear el token", err})
     }
 })
 
@@ -60,7 +60,7 @@ router.post("/verify", (req, res)=>{
     }
     catch(err){
         console.log(err);
-        return res.json({mensaje: "Hubo un error al verificar el token", err})
+        res.json({mensaje: "Hubo un error al verificar el token", err})
     }
 })
 

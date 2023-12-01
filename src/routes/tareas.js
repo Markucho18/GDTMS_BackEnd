@@ -9,10 +9,12 @@ router.get("/", (req, res) => {
   db.query(query, (err, result) => {
     if (err) {
       console.error("Error al ejecutar la consulta", err);
-      return res.json({msg: "Ha occurido un error"});
+      res.json({msg: "Ha occurido un error"});
     }
-    res.send(result);
-    console.log(result);
+    else{
+      console.log(result);
+      res.send(result);
+    }
   });
 });
 
@@ -52,7 +54,7 @@ router.get("/etiqueta", (req, res)=>{
       if(err) res.json({msg:"Hubo un error SQL al obtener las tareas con esa etiqueta", err});
       else res.json({msg: "Las tareas segun etiqueta sean obtenido correctamente con SQL: ", result})
     })
-    console.log("Se ha recibi un idEtiqueta dentro de /Tareas: ", req.query);
+    console.log("Se ha recibio un idEtiqueta dentro de /Tareas: ", req.query);
   }
   else console.log("No hay query(etiqueta) en tareas");
 })
@@ -68,7 +70,7 @@ router.post("/crear", (req, res) => {
       }
     );
   } catch (err) {
-    return res.json({ msg: "Hubo un error al crear la tarea", err });
+    res.json({ msg: "Hubo un error al crear la tarea", err });
   }
 });
 
@@ -94,7 +96,7 @@ router.put("/", (req, res)=>{
     })
   }
   catch(err){
-    return res.json({ msg: "Hubo un error al crear la tarea (catch)", err });
+    res.json({ msg: "Hubo un error al crear la tarea (catch)", err });
   }
 })
 
@@ -106,7 +108,6 @@ router.delete("/", (req, res)=>{
       if(err) res.json({msg: "Hubo un error SQL al eliminar tarea", err});
       else res.json({msg: "Salio todo bien en SQL eliminar tarea", result});
     })
-
   }
   else res.send("No hay query en tareas/delete");
 })

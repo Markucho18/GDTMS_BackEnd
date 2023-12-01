@@ -5,9 +5,7 @@ const router = express.Router();
 router.get("/", (req, res)=>{
     const query = "SELECT * FROM paises"
     db.query(query, (err, result)=>{
-        if(!err){
-            res.send(result)
-        }
+        if(!err) res.send(result)
         else console.log("Hubo un error en paises: ", err)
     })
 })
