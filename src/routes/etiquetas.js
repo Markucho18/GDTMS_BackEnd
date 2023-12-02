@@ -10,9 +10,9 @@ router.get("/", (req, res)=>{
     db.query(query, (err, result)=>{
         if(err){
             console.error('Error al ejecutar la consulta', err);
-            res.json({msg: "Ha occurido un error"});
+            res.json({msg: "Ha occurido un error: ", err});
         }
-        else res.send(result)
+        else res.json("La consulta get en /etiquetas ha sido exitosa: ", result)
     })
     console.log("Se ha hecho una consulta en /etiquetas");
 })
@@ -49,8 +49,8 @@ router.get("/getId", (req, res)=>{
                 else res.json({msg: "Salio todo bien en SQL etiquetas query", result});
             })
             }
-        }else res.json({msg: "Ha occurido un error"});
-    }else res.json({msg: "Ha occurido un error"});
+        }else res.json({msg: "No se obtuvo nomEtiqueta"});
+    }else res.json({msg: "No se obtuvo queries"});
 })
 
 module.exports = router;
