@@ -12,7 +12,7 @@ router.get("/", (req, res)=>{
             console.error('Error al ejecutar la consulta', err);
             res.json({msg: "Ha occurido un error: ", err});
         }
-        else res.json("La consulta get en /etiquetas ha sido exitosa: ", result)
+        else res.json({msg:"La consulta get en /etiquetas ha sido exitosa: ", result })
     })
     console.log("Se ha hecho una consulta en /etiquetas");
 })
@@ -50,6 +50,23 @@ router.get("/getId", (req, res)=>{
             })
             }
         }else res.json({msg: "No se obtuvo nomEtiqueta"});
+    }else res.json({msg: "No se obtuvo queries"});
+})
+
+router.get("/getColor", (req, res)=>{
+    //Comprueba si le ha llegado query
+    if (req.query && Object.keys(req.query).length > 0){
+        if(req.query.idEtiqueta){
+            const idEtiqueta = req.query.idEtiqueta;
+            if(idEtiqueta == null) return res.json("El idEtiqueta recibido por query es null");
+            else{
+                const query = 'SELECT color FROM etiquetas WHERE id_etiqueta = ?'
+                db.query(query, [idEtiqueta], (err, result)=>{
+                if(err) res.json({msg: "Hubo un error SQL en etiquetas query", err});
+                else res.json({msg: "Salio todo bien en SQL etiquetas query", result});
+            })
+            }
+        }else res.json({msg: "No se obtuvo idEtiqueta"});
     }else res.json({msg: "No se obtuvo queries"});
 })
 

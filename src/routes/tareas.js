@@ -19,13 +19,22 @@ router.get("/", (req, res) => {
 });
 
 
-router.get("/inbox", (req, res)=>{
+router.get("/sinFecha", (req, res)=>{
   const query = 'SELECT * FROM tareas WHERE fecha IS NULL'
   db.query(query, (err, result)=>{
     if(err) res.json({msg: "Ha occurido un error al buscar tareas sin fecha", err})
     else res.json({msg: "La consulta SQL ha devuelto tareas sin fecha correctamente", result})
   })
-  console.log("Se ha hecho una consulta en /tareas/inbox");
+  console.log("Se ha hecho una consulta en /tareas/sinFecha");
+})
+
+router.get("/caducadas", (req, res)=>{
+  const query = 'SELECT * FROM tareas WHERE fecha < CURRENT_DATE()'
+  db.query(query, (err, result)=>{
+    if(err) res.json({msg: "Ha occurido un error al buscar tareas caducadas", err})
+    else res.json({msg: "La consulta SQL ha devuelto tareas caducadas correctamente", result})
+  })
+  console.log("Se ha hecho una consulta en /tareas/caducadas");
 })
 
 router.get("/hoy", (req, res)=>{
@@ -47,16 +56,24 @@ router.get("/proximo", (req, res)=>{
 
 router.get("/etiqueta", (req, res)=>{
   if(req.query && Object.keys(req.query).length > 0){
-    const idEtiqueta = req.idEtiqueta;
+    const idEtiqueta = req.query.idEtiqueta;
     console.log("idEtiqueta es: ", idEtiqueta);
-    const query = 'SELECT * FROM tareas WHERE id_etiqueta = ? ';
+    const query = 'SELECT * FROM tareas WHERE id_etiqueta = ? AND fecha > CURRENT_DATE()';
     db.query(query, [idEtiqueta], (err, result)=>{
       if(err) res.json({msg:"Hubo un error SQL al obtener las tareas con esa etiqueta", err});
       else res.json({msg: "Las tareas segun etiqueta sean obtenido correctamente con SQL: ", result})
     })
-    console.log("Se ha recibio un idEtiqueta dentro de /Tareas: ", req.query);
+    console.log("Se ha recibio un idEtiqueta dentro de /Tarea/etiqueta: ", req.query);
   }
   else console.log("No hay query(etiqueta) en tareas");
+})
+
+router.get("/fechasUnicas", (req,res)=>{
+  const query = 'SELECT DISTINCT fecha FROM tareas WHERE fecha > CURRENT_DATE() AND fecha IS NOT NULL';
+  db.query(query, (err, result)=>{
+    if(err) res.json({msg:"Hubo un error SQL al obtener las fechaUnicas: ", err});
+    else res.json({msg: "Las tareas segun etiqueta sean obtenido correctamente con SQL: ", result});
+  })
 })
 
 router.post("/crear", (req, res) => {
