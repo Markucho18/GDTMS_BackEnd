@@ -63,7 +63,7 @@ router.get("/etiqueta", (req, res)=>{
       if(err) res.json({msg:"Hubo un error SQL al obtener las tareas con esa etiqueta", err});
       else res.json({msg: "Las tareas segun etiqueta sean obtenido correctamente con SQL: ", result})
     })
-    console.log("Se ha recibio un idEtiqueta dentro de /Tarea/etiqueta: ", req.query);
+    console.log("Se ha recibido un idEtiqueta dentro de /Tarea/etiqueta: ", req.query);
   }
   else console.log("No hay query(etiqueta) en tareas");
 })
@@ -75,6 +75,7 @@ router.get("/fechasUnicas", (req,res)=>{
     else res.json({msg: "Las tareas segun etiqueta sean obtenido correctamente con SQL: ", result});
   })
 })
+
 
 router.post("/crear", (req, res) => {
   try {
@@ -128,5 +129,26 @@ router.delete("/", (req, res)=>{
   }
   else res.send("No hay query en tareas/delete");
 })
+
+router.delete("/sinFecha", (req, res)=>{
+  const query = 'DELETE FROM tareas WHERE fecha IS NULL'
+  db.query(query, (err, result)=>{
+    if(err) res.json({msg: "Ha occurido un error al eliminar tareas sin fecha", err})
+    else res.json({msg: "La consulta SQL ha eliminado tareas sin fecha correctamente", result})
+  })
+  console.log("Se ha hecho una consulta en /tareas/sinFecha(.delete)");
+})
+
+router.delete("/caducadas", (req, res)=>{
+  const query = 'DELETE FROM tareas WHERE fecha < CURRENT_DATE()'
+  db.query(query, (err, result)=>{
+    if(err) res.json({msg: "Ha occurido un error al eliminar tareas caducadas", err})
+    else res.json({msg: "La consulta SQL ha eliminado tareas caducadas correctamente", result})
+  })
+  console.log("Se ha hecho una consulta en /tareas/caducadas(.delete)");
+})
+
+
+router.delete("/")
 
 module.exports = router;
