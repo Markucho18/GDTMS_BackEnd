@@ -22,8 +22,9 @@ const hashPassword = async (password)=>{
 //VALIDAR USUARIO
 router.post("/username", (req, res)=>{
     try{
+        const {username} = req.body
         const query = "SELECT username FROM usuarios WHERE username = ? "
-        db.query(query, [req.body.username], (err, result) =>{
+        db.query(query, [username], (err, result) =>{
             if(err) res.json({mensaje: "Hubo un error", error: err});
             else if(result.length > 0){
                 res.json({mensaje: "Se encontro coincidencia de username", resultado: result});
