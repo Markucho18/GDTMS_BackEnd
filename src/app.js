@@ -7,13 +7,6 @@ const port = 3001;
 
 //Resuelve el problema de origen cruzado (puertos diferentes)
 app.use(cors());
-app.use((req, res, next)=>{
-    console.log(req.url);
-    next();
-})
-app.get("/", (req, res)=>{
-    res.send("Hola amigo, estas en el archivo principal");
-})
 
 //Traduce lo que llegue de la request de cualquier ruta al tipo de archivo correspondiente.
 app.use(bodyParser.json());
@@ -33,12 +26,8 @@ app.use('/etiquetas', require('./routes/etiquetas'));
 
 app.use('/paises', require('./routes/paises'))
 
-app.use((req, res)=>{
-    res.send("Pagina no encontrada");
-})
+app.use((req, res)=> res.send("Pagina no encontrada"));
 
-app.listen(port, ()=>{
-    console.log(`Server listening on port: ${port}`);
-})
+app.listen(port, ()=> console.log(`Server listening on port: ${port}`));
 
 

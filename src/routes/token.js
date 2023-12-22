@@ -2,15 +2,8 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const db = require('../db')
-const cookieParser = require('cookie-parser');
 
 const secretKey = '48253755061145888295'
-
-router.get('/', (req, res) =>{
-    res.send("Que onda ");
-})
-
-router.use(cookieParser());
 
 router.post("/create", (req, res)=>{
     try{

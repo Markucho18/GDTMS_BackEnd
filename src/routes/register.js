@@ -3,8 +3,6 @@ const router = express.Router()
 const bcrypt = require('bcrypt');
 const db = require('../db');
 
-router.get("/", (req, res)=> res.send("Estas en /register"))
-
 const saltRounds = 10;
 
 const hashPassword = async (password)=>{

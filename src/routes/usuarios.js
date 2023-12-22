@@ -3,8 +3,6 @@ const express = require('express');
 const db = require('../db');
 const router = express.Router();
 
-let userId = "";
-
 router.get("/", (req, res)=>{
     const query = "SELECT * FROM `usuarios`"
     db.query(query, (err, result)=>{
@@ -18,7 +16,6 @@ router.get("/", (req, res)=>{
 
 router.post("/obtenerId", (req, res)=>{
     const token = req.body.token
-    console.log("El token recibido del front es: ", token);
     const query = 'SELECT id_usuario FROM usuarios WHERE token = ?'
     db.query(query, [token], (err, result)=>{
         if(err) res.json({msg:"Hubo un error al consultar usuarios SQL: ", err})

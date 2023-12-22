@@ -7,14 +7,8 @@ const router = express.Router();
 router.get("/", (req, res) => {
   const query = `SELECT * FROM tareas`;
   db.query(query, (err, result) => {
-    if (err) {
-      console.error("Error al ejecutar la consulta", err);
-      res.json({msg: "Ha occurido un error"});
-    }
-    else{
-      console.log(result);
-      res.send(result);
-    }
+    if (err) res.json({msg: "Ha occurido un error"});
+    else res.send(result);
   });
 });
 
@@ -24,7 +18,6 @@ router.get("/sinFecha", (req, res)=>{
     if(err) res.json({msg: "Ha occurido un error al buscar tareas sin fecha", err})
     else res.json({msg: "La consulta SQL ha devuelto tareas sin fecha correctamente", result})
   })
-  console.log("Se ha hecho una consulta en /tareas/sinFecha");
 })
 
 router.get("/caducadas", (req, res)=>{
@@ -33,7 +26,6 @@ router.get("/caducadas", (req, res)=>{
     if(err) res.json({msg: "Ha occurido un error al buscar tareas caducadas", err})
     else res.json({msg: "La consulta SQL ha devuelto tareas caducadas correctamente", result})
   })
-  console.log("Se ha hecho una consulta en /tareas/caducadas");
 })
 
 router.get("/hoy", (req, res)=>{
@@ -56,12 +48,11 @@ router.get("/proximo", (req, res)=>{
 router.get("/etiqueta", (req, res)=>{
   if(req.query && Object.keys(req.query).length > 0){
     const {idEtiqueta, userId} = req.query;
-    const query = 'SELECT * FROM tareas WHERE id_etiqueta = ? AND fecha > CURRENT_DATE() AND id_usuario = ?';
+    const query = 'SELECT * FROM tareas WHERE id_etiqueta = ? AND fecha >= CURRENT_DATE() AND id_usuario = ?';
     db.query(query, [idEtiqueta, userId], (err, result)=>{
       if(err) res.json({msg:"Hubo un error SQL al obtener las tareas con esa etiqueta", err});
       else res.json({msg: "Las tareas segun etiqueta sean obtenido correctamente con SQL: ", result})
     })
-    console.log("Se ha recibido un idEtiqueta dentro de /Tarea/etiqueta: ", req.query);
   }
   else console.log("No hay query(etiqueta) en tareas");
 })
@@ -72,7 +63,6 @@ router.get("/completas", (req, res)=>{
     if(err) res.json({msg:"Hubo un error SQL al obtener las tareas completas", err});
       else res.json({msg: "Las tareas completas sean obtenido correctamente con SQL: ", result})
   })
-  console.log("Consulta en /tareas/completas")
 })
 
 router.get("/fechasUnicas", (req,res)=>{
@@ -87,7 +77,6 @@ router.get("/fechasUnicas", (req,res)=>{
 router.post("/crear", (req, res) => {
   try {
     const { idUsuario, idEtiqueta, nombre, prioridad, fecha, descripcion } = req.body;
-    console.log("El idUsuario recibido del frontend es: ", idUsuario);
     const query = "INSERT INTO tareas (id_usuario, id_etiqueta, nombre, prioridad, fecha, descripcion) VALUES (?, ?, ?, ?, ?, ?) ";
     db.query(query, [idUsuario, idEtiqueta || null, nombre, prioridad, fecha || null, descripcion || null], (err, result) => {
         if (err) res.json({msg: "Hubo un error al hacer la consulta SQL en crearTarea", err});
@@ -100,9 +89,7 @@ router.post("/crear", (req, res) => {
 });
 
 router.post("/buscar", (req, res)=>{
-  console.log(req.body);
   const {textoBusqueda, userId} = req.body;
-  console.log("El textoBusqueda recibido desde el frontend es: ", textoBusqueda);
   const query = `SELECT * FROM tareas WHERE nombre LIKE "%${textoBusqueda}%" AND id_usuario = ${userId}`;
   db.query(query, (err, result)=>{
     if(err) res.json({msg: "Hubo un error SQL al buscar tarea", err});
@@ -113,7 +100,6 @@ router.post("/buscar", (req, res)=>{
 router.put("/", (req, res)=>{
   try{
     const {idTarea, idEtiqueta, nombre, prioridad, fecha, descripcion } = req.body;
-    console.log("Los datos de la tarea recibidos son: ", req.body);
     const query = 'UPDATE tareas SET nombre = ? , prioridad = ? , fecha = ? , descripcion = ? , id_etiqueta = ? WHERE id_tarea = ?'
     db.query(query, [nombre, prioridad, fecha, descripcion, idEtiqueta, idTarea], (err, result)=>{
       if(err) res.json({msg: "Hubo un error al hacer la consulta SQL en editarTarea", err});
@@ -132,7 +118,6 @@ router.put("/completar", (req, res)=>{
     if(err) res.json({msg: "Hubo un error SQL al completar la tarea", err});
     else res.json({msg: "Salio todo bien en SQL completar tarea", result});
   })
-  console.log("Consulta en /tareas/completar");
 })
 
 router.delete("/", (req, res)=>{
@@ -153,7 +138,6 @@ router.delete("/sinFecha", (req, res)=>{
     if(err) res.json({msg: "Ha occurido un error al eliminar tareas sin fecha", err})
     else res.json({msg: "La consulta SQL ha eliminado tareas sin fecha correctamente", result})
   })
-  console.log("Se ha hecho una consulta en /tareas/sinFecha(.delete)");
 })
 
 router.delete("/caducadas", (req, res)=>{
@@ -162,7 +146,6 @@ router.delete("/caducadas", (req, res)=>{
     if(err) res.json({msg: "Ha occurido un error al eliminar tareas caducadas", err})
     else res.json({msg: "La consulta SQL ha eliminado tareas caducadas correctamente", result})
   })
-  console.log("Se ha hecho una consulta en /tareas/caducadas(.delete)");
 })
 
 router.delete("/completas", (req, res)=>{

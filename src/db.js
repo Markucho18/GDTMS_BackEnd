@@ -16,11 +16,4 @@ connection.connect((err) => {
     console.log('Conexión a la base de datos establecida');
   });
 
-  /*
-process.on('SIGINT', () => {
-  connection.end();
-  process.exit();
-});
-*/
-
 module.exports = connection;
